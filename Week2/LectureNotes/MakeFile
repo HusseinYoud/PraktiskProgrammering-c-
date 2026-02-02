@@ -1,0 +1,25 @@
+CXXFLAGS = -Wall -Wextra -std=c++17 -O
+LINK.o = $(CXX) $(LDFLAGS)
+
+LDLIBS += -LSTDC++ -lm
+
+out.txt : main
+    ./main > Out.txt
+
+main : main.o hello.o
+# $(CXX) $(LDFLAGS) main.o hello.o $(LDLIBS) -o main
+# $(CXX) $(LDFLAGS) $^ $(LDLIBS) -o main
+
+main.o : hello.h sfuns.h main.cc
+# $(CXX) $(CXXFLAGS) -c main.cc -o main.o
+
+hello.o: hello.h hello.cc
+# $(CXX) $(CXXFLAGS) -c hello.cc -0 hello.o
+
+sfuns.o: sfuns.h sfuns.cc
+#   $(CXX) $(CXXFLAGS) -c sfuns.cc -o sfuns.o
+
+.PHONY:clean
+
+Makefile
+
