@@ -1,0 +1,48 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[danish]{babel}
+\usepackage[expansion=false]{microtype}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{listings}
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber]{biblatex}
+\usepackage[export]{adjustbox}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\graphicspath{{images/}}
+%\addbibresource{bibliography.bib}
+\everymath{\displaystyle}
+
+% Trækker fra TEXINPUTS (ikke absolut sti)
+\input{"C:/Users/habbo/OneDrive - Aarhus universitet/Skole/UNI/Latex/MatematikTemplate.tex"}
+
+\renewcommand{\danishhyphenmins}{22}
+\def\du#1{\underline{\underline{#1}}}
+\pagestyle{fancy}
+\lhead{X \\ X}
+\chead{X \\ X}
+\rhead{\today \\ X}
+\setlength{\headheight}{28pt}
+%Fod-linje, som slutter teksten, og starter fodnoterne
+\renewcommand{\footrulewidth}{0.4pt}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{X}} \\ [0.4cm]
+    {\large X } \\ [0.1cm]
+    \hrulefill
+\end{center}
+
+
+\newpage
+%\begin{thebibliography}{99}
+%\printbibliography
+%\end{thebibliography}
+
+\end{document}
