@@ -1,0 +1,24 @@
+1.
+------------------------------
+float eps=1.19209e-07   The system 1.19209e-07
+ For comparison it should be 1.19209e-07
+double eps=2.22045e-16   The system 2.22045e-16
+ For comparison it should be 2.22045e-16
+long double eps=1.0842e-19   The system 1.0842e-19
+------------------------------
+2.
+------------------------------
+a==b ? false
+a>1  ? false
+b>1  ? true
+I assume what is happening is that the compiler is rounding the tiny numbers to nearest number. We see that small numbers might hit a floating point underflow therefore a is not equal to b and why adding the two tiny numbers to 1 is different than adding 1 to the two tiny numbers
+tiny=0.00000000000000011102
+1+tiny+tiny=1.00000000000000000000
+tiny+tiny+1=1.00000000000000022204
+------------------------------
+3.
+------------------------------
+d1==d2? false
+d1=0.79999999999999993339
+d2=0.80000000000000004441
+For the implementation of the approx function =true
