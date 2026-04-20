@@ -9,9 +9,9 @@ constexpr double pi = std::numbers::pi;
 constexpr double NaN = std::numeric_limits<double>::quiet_NaN();
 
 double sgamma(double x){
-if(x<0)return PI/std::sin(PI*x)/sgamma(1-x);
+if(x<0)return pi/std::sin(pi*x)/sgamma(1-x);
 if(x<9)return sgamma(x+1)/x;
-double lnsgamma=std::log(2*PI)/2+(x-0.5)*std::log(x)-x
+double lnsgamma=std::log(2*pi)/2+(x-0.5)*std::log(x)-x
     +(1.0/12)/x-(1.0/360)/(x*x*x)+(1.0/1260)/(x*x*x*x*x);
 return std::exp(lnsgamma);
 }
@@ -30,6 +30,6 @@ return 1-sum*std::exp(-x*x);
 double lngamma(double x){
 if(x<=0) return NaN;
 if(x<9) return lngamma(x+1)-std::log(x);
-return x*std::log(x+1/(12*x-1/x/10))-x+std::log(2*PI/x)/2;
+return x*std::log(x+1/(12*x-1/x/10))-x+std::log(2*pi/x)/2;
 }
 }
