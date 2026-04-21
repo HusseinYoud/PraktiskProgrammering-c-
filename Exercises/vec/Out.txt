@@ -1,0 +1,16 @@
+a: 1 2 3
+b: 4 5 6
+----------
+Vectors done
+----------
+We'd now like to test if we can change the vector and use all of our operators
+----------
+New set a is = 2 1 5
+b=a, b is now = 2 1 5
+c = b + a, c is now = 4 2 10
+d = b - a, d is now = 0 0 0
+e = 5*a, e is now = 10 5 25
+f = a/2, f is now = 1 0.5 2.5
+norm of a is = 5.47723
+dot product of a and b is = 30
+cross product of a and b is = 0 0 0
