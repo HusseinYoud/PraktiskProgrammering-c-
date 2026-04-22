@@ -1,0 +1,24 @@
+terms : 1000000000
+threads : 1
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 2
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 3
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 4
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 5
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 6
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 7
+Harmonic sum : 21.3005
+terms : 1000000000
+threads : 8
+Harmonic sum : 21.3005
