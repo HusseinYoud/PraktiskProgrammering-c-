@@ -1,0 +1,9 @@
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra -O2
+LDFLAGS += -lstdc++ -lm
+
+Out.txt: main  #mangler lige
+
+.PHONY: clean
+clean: 
+	rm -f *.o main
