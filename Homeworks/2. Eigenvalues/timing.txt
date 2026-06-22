@@ -1,0 +1,5 @@
+Timing of convergence calculations
+Sequential:
+0.23 seconds
+Parallel:
+0.14 seconds
