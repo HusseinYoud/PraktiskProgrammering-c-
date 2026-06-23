@@ -28,8 +28,11 @@ namespace pp{
         for (int i = 0; i < n; ++i) {
             large_s = std::max(large_s, std::abs(s[i]));
         }
-        const double pd_tol = 1e-12 * std::max(1.0,large_s);
-
+        if (large_s <= 0.0) {
+            throw std::invalid_argument("Matrix not defentive");
+        }
+        const double pd_tol = 1e-12 * large_s;
+        
         for (int i = 0; i < n; ++i) {
             if (s[i] <= pd_tol) {
                 throw std::invalid_argument("Matrix not positive");
