@@ -11,7 +11,7 @@
 #include<limits>
 #include<algorithm>
 
-
+//Debugging and making a readable out.txt file has been done by chatGPT
 
 pp::vec alpha_from_log_alpha(const pp::vec& log_alpha){
     pp::vec alpha(log_alpha.size());
@@ -77,6 +77,8 @@ int main() {
     {
         std::cout << "B. Finding the ground state of Hydrogen with the Schrödinger equation" << std::endl;
 
+        std::cout << std::left << std::setw(5) << "n" << std::setw(22) << "Energy" << std::setw(22) << "|E - (-0.5)|" << std::setw(22) << "lambda_min / lambda_max" << std::setw(14) << "Iterations" << "Converged" << std::endl;
+        std::cout << std::string(100,'-') << std::endl;
         for(int n = 1; n <= 5; ++n){
             pp::vec start_log_alpha(n);
             const double center = 0.5*static_cast<double>(n-1);
@@ -107,6 +109,32 @@ int main() {
                 std::cout << std::left << std:: setw(5) << n << "Failed " << error.what() << std::endl;
             }
         }
+    }
+    {
+        std::cout << "C.Implement a function to solve the generalized eigenvalue problem via Cholesky decomp of matrix B" << std::endl;
+        const int n = 5;
+
+        pp::matrix A = pp::rando_sym_M(n,1.0,11);
+        pp::matrix R = pp::rando_M(n,n,1.0,12);
+        pp::matrix B = R.T() * R + static_cast<double>(n) *pp::Id(n);
+
+        pp::GEVD ordinary_method(A,B);
+
+        pp::GEVD_cholesky cholesky_method(A,B);
+        pp::matrix E = pp::diag(cholesky_method.w);
+        pp::matrix left = A * cholesky_method.V;
+        pp::matrix right = B * cholesky_method.V * E;
+        pp::matrix B_orthogonality = cholesky_method.V.T() * B * cholesky_method.V;
+
+
+        std::cout << std::boolalpha;
+
+        std::cout << "V^T B V = I: " << pp::approx(B_orthogonality, pp::Id(n), 1e-8, 1e-8) << std::endl;
+
+        std::cout << "A  V = B V E: " << pp::approx(left, right, 1e-8, 1e-8) << std::endl;
+        std::cout << " Cholesky eigenvalues agree" << "with Task A: " << pp::approx(ordinary_method.w,cholesky_method.w,1e-8,1e-8) << std::endl;
+
+        cholesky_method.w.print("The generalized eigenvalues from the Cholesky decomp of matrix B");
     }
     return 0;
 }

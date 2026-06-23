@@ -14,6 +14,15 @@ namespace pp{
 
     };
 
+    matrix cholesky( const matrix& B);
+
+    struct GEVD_cholesky{
+        vec w;
+        matrix V;
+
+        GEVD_cholesky(const matrix& A, const matrix& B);
+    };
+
 
 
 } //namespace pp
