@@ -19,7 +19,7 @@ namespace pp{
         const double& operator()(int i,int j) const;
 
         vec& operator[](int j);
-        const double& operator[](int j) const;
+        const vec& operator[](int j) const;
 
         void setid();
         matrix transpose() const;

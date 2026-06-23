@@ -16,8 +16,10 @@ int main() {
     pp::matrix left = A * gevd.V;
     pp::matrix right = B * gevd.V * E;
 
+    pp::matrix B_orthogonality = gevd.V.T() * B * gevd.V;
+    
     std::cout << std::boolalpha;
-    std:: cout << "V^T B V = I: " << pp::approx(B_orthogonality, pp::Id(n),1e-8, 1e-8) << std::endl;
+    std::cout << "V^T B V = I: " << pp::approx(B_orthogonality, pp::Id(n),1e-8, 1e-8) << std::endl;
     std::cout << "A V = B V E: " << pp::approx(left,right, 1e-8,1e-8) << std::endl;
 
     gevd.w.print("Generalized eigen values : ");
