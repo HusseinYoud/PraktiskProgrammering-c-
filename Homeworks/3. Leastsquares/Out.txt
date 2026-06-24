@@ -1,0 +1,39 @@
+A. Ordinary least-squares fit by QR decomposition
+------------------------------------------------
+
+The linear fit is of the form: ln(y) = c0 + c1 * t
+ where c0 = ln(a) and c1 = -lambda
+
+Error propagation:
+For f(y) = ln(y), f'(y) = 1/y.
+Therefore delta(ln(y)) is approximately dy/y.
+
+c0 = ln(a) = 4.95866
+c1 = -lambda = -0.170624
+a = 142.404
+lambda = 0.170624 1/day
+half-life = 4.06242 days
+chi^2 = 1.19958
+degrees of freedom = 7
+modern half-life of Ra-224 = 3.66 days
+relative difference = 10.9952 %
+
+B. Uncertainties of the fitting coefficients
+------------------------------------------------
+
+Covariance matrix:
+0.0012533	-0.000197055	
+-0.000197055	5.12172e-05	
+
+c0 = 4.95866 +/- 0.0354019
+c1 = -0.170624 +/- 0.00715662
+a = 142.404 +/- 5.04136
+lambda = 0.170624 +/- 0.00715662 1/day
+half-life = 4.06242 +/- 0.170394 days
+one-sigma interval = [3.89203, 4.23282] days
+modern value = 3.66 days
+The modern value does not agree with the fitted value within the estimated uncertainty.
+C.Evaliation of the quality of the uncertainties of the fit coefficients
+------------------------------------------------
+The best fit as well as the coefficients are = 142.404
+as well as-0.163467
