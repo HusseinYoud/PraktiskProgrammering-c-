@@ -1,0 +1,20 @@
+A. Linear spline (linear interpolation)
+----------------------------------------
+Integral of cos from 0 to 0.5
+Linear spline: 0.469395640473
+Exact cos-integral: 0.479425538604
+
+B. Quadratic spline
+----------------------------------------
+
+y = 1
+b = [0, 0, 0, 0]
+c = [0, 0, 0, 0]
+
+y = x
+b = [1, 1, 1, 1]
+c = [0, 0, 0, 0]
+
+y = x^2
+b = [2, 4, 6, 8]
+c = [1, 1, 1, 1]
