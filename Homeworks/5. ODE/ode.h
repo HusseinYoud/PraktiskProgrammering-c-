@@ -23,7 +23,8 @@ std::tuple<std::vector<double>, std::vector<vec>> driver(
     double b,
     double h = 0.125,
     double acc = 0.01,
-    double eps = 0.01
+    double eps = 0.01,
+    double hmax = std::numeric_limits<double>::infinity()
 );
 
 }
