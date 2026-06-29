@@ -1,4 +1,5 @@
 This project solves the generalized eigenvalue problem
+Most code blocks here are copied from other homeworks such as homework 2 EVD as well as a bit from homework 9 minimum. All parts of the examsproject are answered. No plots have been generated instead. It felt unnesscary but an out.txt of all tests is generated.
 
 [
 AV=BVE
