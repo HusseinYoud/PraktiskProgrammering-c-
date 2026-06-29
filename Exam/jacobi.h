@@ -2,6 +2,7 @@
 #include "matrix.h"
 #include<tuple>
 
+//Entire jacobi.h file is taken from the homework 2, with some modifications to be closer to what i know about the subject.
 namespace pp{
     struct EVD{
         vec w;

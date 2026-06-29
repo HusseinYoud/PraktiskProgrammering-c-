@@ -40,8 +40,6 @@ namespace pp{
 
 
     }
-
-    //A bit of a crazy implementation but the idea is that we create a copy of the input matrix when the constructor starts.
     //Basically it asks has any diagonal element changed after a full rotation, then it goes to changed = true which adds the element to matrix A and matrix V, if changed = true it asks if it needs to make another sweep or not. If yes it makes another sweep if no it has converged.
     EVD::EVD(matrix A) : w(A.size1()), V(A.size1(), A.size2()){
 

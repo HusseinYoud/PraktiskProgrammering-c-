@@ -3,7 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include <stdexcept>
-
+//mostly taken from homework 2.
 namespace pp{
 
     void hydro_matrix(const vec& alpha, matrix& H, matrix& N){

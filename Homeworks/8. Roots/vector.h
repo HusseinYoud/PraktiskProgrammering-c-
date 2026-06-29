@@ -5,6 +5,8 @@
 #include <cmath>
 namespace pp{
 
+//Matrix.h, Vector.h, vector.cc and matrix.cc are all copied from earlier homeworks. (ode too)
+
 struct vec {
     std::vector<double> data;
 

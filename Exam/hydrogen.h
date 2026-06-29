@@ -3,7 +3,7 @@
 #include "vector.h"
 
 namespace pp{
-    //Hydrogenstate kind of copy pasted from homework 2 but rewritten to fit exam better
+    //Hydrogenstate copy pasted from homework 2 but rewritten to fit exam better
     struct hydrogenstate {
         double energy;
         vec alpha;

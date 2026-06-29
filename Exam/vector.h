@@ -4,6 +4,8 @@
 #include <vector>
 #include <cmath>
 
+//entire vector.h file is taken from the homework 2
+
 namespace pp{
     struct vec {
         std::vector<double> data;

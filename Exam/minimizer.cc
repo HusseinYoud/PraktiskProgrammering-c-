@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-// Debugging mainly helped with by ChatGPT
+// Debugging mainly helped with by ChatGPT, entire minimizer here inspired by homework 9.
 
 namespace pp {
 

@@ -4,6 +4,8 @@
 #include <cmath>
 #include <stdexcept>
 
+//GEVD inspired by earlier exercise. 
+
 namespace pp{
     namespace {
         matrix solve_lower (const matrix& L, const matrix& R){

@@ -1,5 +1,4 @@
 #include "minimization.h"
-
 #include <cmath>
 #include <exception>
 #include <iomanip>
@@ -9,7 +8,6 @@
 
 
 namespace {
-
 void print_vector(const pp::vec& x)
 {
     std::cout << "(";
@@ -85,16 +83,6 @@ int main()
         const double acc = 1e-6;
         const int max_steps = 1000;
 
-        /*
-         * Rosenbrock's valley function:
-         *
-         *     f(x,y) = (1-x)^2 + 100(y-x^2)^2
-         *
-         * Exact minimum:
-         *
-         *     (x,y) = (1,1)
-         *     f(1,1) = 0
-         */
         const pp::objective_function rosenbrock =
             [](const pp::vec& x) {
                 const double x0 = x[0];
@@ -106,7 +94,7 @@ int main()
             };
 
         std::cout << "A. Newton minimization with numerical derivatives\n";
-        std::cout << "=================================================\n\n";
+        std::cout << "------------------------------------------------" << std::endl;
 
         run_minimization(
             "Rosenbrock function",
@@ -117,15 +105,6 @@ int main()
         );
 
 
-        /*
-         * Himmelblau's function:
-         *
-         *     f(x,y)
-         *       = (x^2+y-11)^2
-         *       + (x+y^2-7)^2
-         *
-         * It has four local minima, all with f approximately zero.
-         */
         const pp::objective_function himmelblau =
             [](const pp::vec& x) {
                 const double x0 = x[0];

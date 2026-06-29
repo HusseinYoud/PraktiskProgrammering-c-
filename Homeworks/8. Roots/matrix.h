@@ -1,7 +1,7 @@
 #pragma once
 #include"vector.h"
 #include<string>
-
+//Matrix.h, Vector.h, vector.cc and matrix.cc are all copied from earlier homeworks. (ode too)
 namespace pp{
     struct matrix {
         int Mrows = 0;

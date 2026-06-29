@@ -1,7 +1,8 @@
 #pragma once
 #include "vector.h"
 #include<functional>
-//Debugging helped with by ChatGPT 
+//Debugging helped with by ChatGPT, minimizer here inspired by homework 9.
+
 namespace pp{
     struct simple_result{
         vec x;

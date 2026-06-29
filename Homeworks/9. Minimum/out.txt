@@ -1,6 +1,5 @@
 A. Newton minimization with numerical derivatives
-=================================================
-
+------------------------------------------------
 Rosenbrock function
 -------------------
 Starting point   = (-1.2, 1)

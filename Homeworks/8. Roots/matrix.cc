@@ -5,6 +5,7 @@
 #include<stdexcept>
 #include<cassert>
 
+//Matrix.h, Vector.h, vector.cc and matrix.cc are all copied from earlier homeworks. (ode too)
 namespace pp{
     matrix::matrix(int rows, int columns) : Mrows(rows), Mcolumns(columns), M(Mcolumns, vec(Mrows)) {}
 
