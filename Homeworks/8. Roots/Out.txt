@@ -1,0 +1,113 @@
+A. Newton method with numerical Jacobian
+========================================
+
+A.1 One-dimensional test
+----------------------------------------
+Equation: x^2 - 2 = 0
+Calculated root: (1.41421356237469)
+Exact positive root: 1.4142135623731
+Absolute error: 1.5922818619174e-12
+Residual norm: 4.50395276629934e-12
+
+A.2 Two-dimensional test
+----------------------------------------
+Equations:
+    x^2 + y^2 - 1 = 0
+    x - y           = 0
+Calculated root: (0.707106781186547, 0.707106781186547)
+Expected positive root: (0.707106781186547, 0.707106781186547)
+Residual norm: 2.22044604925031e-16
+
+A.3 Rosenbrock valley function
+----------------------------------------
+Start point: (-1.2, 1)
+Calculated stationary point: (0.999999999999937, 0.999999999999875)
+Expected minimum: (1, 1)
+Function value: 3.90694456667186e-27
+Gradient norm: 1.25011112572793e-13
+
+A.4 Himmelblau function
+----------------------------------------
+Solution 1
+Start point: (3.5, 2.5)
+Calculated stationary point: (3, 2)
+Function value: 6.31088724176809e-30
+Gradient norm: 2.07157025572446e-14
+
+Solution 2
+Start point: (-3, 3)
+Calculated stationary point: (-2.80511808695274, 3.13131251825057)
+Function value: 7.88860905221012e-31
+Gradient norm: 1.12655862208251e-14
+
+Solution 3
+Start point: (-4, -3)
+Calculated stationary point: (-3.77931025337792, -3.28318599128687)
+Function value: 2.02084328247767e-23
+Gradient norm: 5.73071505393701e-11
+
+Solution 4
+Start point: (4, -2)
+Calculated stationary point: (3.58442834033069, -1.84812652696464)
+Function value: 2.57832875984246e-24
+Gradient norm: 1.99844962894776e-11
+
+
+B. Hydrogen ground state by shooting
+========================================
+
+Boundary condition near r = 0
+----------------------------------------
+Assume
+    f(r) = a*r + b*r^2 + O(r^3).
+Then
+    f''(r) = 2*b + O(r).
+Inserting into
+    -f''/2 - f/r = E*f
+and comparing the constant terms gives
+    -b - a = 0,
+so b = -a.
+The normalization is arbitrary, so choosing a = 1 gives
+    f(r) = r - r^2 + O(r^3).
+
+Shooting-method result
+----------------------------------------
+rmin                  = 0.001
+rmax                  = 8
+ODE acc               = 1e-06
+ODE eps               = 1e-06
+Calculated energy     = -0.499975098719794
+Exact energy          = -0.5
+Absolute energy error = 2.49012802061577e-05
+M(E) = f_E(rmax)      = -3.95039181024975e-07
+
+Check of f_0(r) = r*exp(-r), E_0 = -1/2
+----------------------------------------
+r =  0.25    equation residual = 4.16333634234434e-17
+r =   0.5    equation residual = 0
+r =     1    equation residual = 0
+r =     2    equation residual = 0
+r =     4    equation residual = 0
+
+Generated data files
+----------------------------------------
+hydrogen-wavefunction.data
+convergence-rmax.data
+convergence-rmin.data
+convergence-acc.data
+convergence-eps.data
+
+
+C. Optimized quadratic line search
+========================================
+
+The Newton routine used in parts A and B contains:
+1. One Jacobian matrix allocated before the iteration
+   loop and updated in place at every Newton step.
+2. A quadratic interpolation line search based on
+       phi(alpha) = ||f(x + alpha*Dx)||^2 / 2.
+3. Backtracking until the sufficient-decrease
+   condition is satisfied or alpha reaches alpha_min.
+
+The successful Rosenbrock, Himmelblau, and hydrogen
+calculations above test this optimized implementation.

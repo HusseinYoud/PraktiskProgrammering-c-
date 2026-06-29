@@ -1,0 +1,734 @@
+#include "hydrogen.h"
+#include "roots.h"
+
+#include <cmath>
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+
+namespace {
+
+
+void print_vector(const pp::vec& x)
+{
+    std::cout << "(";
+
+    for (int i = 0; i < x.size(); ++i) {
+        std::cout << x[i];
+
+        if (i + 1 < x.size()) {
+            std::cout << ", ";
+        }
+    }
+
+    std::cout << ")";
+}
+
+
+
+double rosenbrock_value(const pp::vec& z)
+{
+    const double x = z[0];
+    const double y = z[1];
+
+    const double a = 1.0 - x;
+    const double b = y - x * x;
+
+    return a * a + 100.0 * b * b;
+}
+
+
+
+pp::vec rosenbrock_gradient(const pp::vec& z)
+{
+    const double x = z[0];
+    const double y = z[1];
+
+    return pp::vec{
+        2.0 * (x - 1.0)
+            - 400.0 * x * (y - x * x),
+
+        200.0 * (y - x * x)
+    };
+}
+
+
+
+double himmelblau_value(const pp::vec& z)
+{
+    const double x = z[0];
+    const double y = z[1];
+
+    const double A = x * x + y - 11.0;
+    const double B = x + y * y - 7.0;
+
+    return A * A + B * B;
+}
+
+
+
+pp::vec himmelblau_gradient(const pp::vec& z)
+{
+    const double x = z[0];
+    const double y = z[1];
+
+    const double A = x * x + y - 11.0;
+    const double B = x + y * y - 7.0;
+
+    return pp::vec{
+        4.0 * x * A + 2.0 * B,
+        2.0 * A + 4.0 * y * B
+    };
+}
+
+
+
+double hydrogen_energy_error(double energy)
+{
+    const double exact_energy = -0.5;
+
+    return std::abs(
+        energy - exact_energy
+    );
+}
+
+
+double exact_schrodinger_residual(double r)
+{
+    const double E = -0.5;
+    const double exponential =
+        std::exp(-r);
+
+    const double f =
+        r * exponential;
+
+    const double second_derivative =
+        (r - 2.0) * exponential;
+
+    return
+        -0.5 * second_derivative
+        - f / r
+        - E * f;
+}
+
+
+
+double calculate_hydrogen_energy(
+    double rmin,
+    double rmax,
+    double ode_acc,
+    double ode_eps
+)
+{
+    const double root_acc = 1e-8;
+
+    return pp::hydrogen_ground_state_energy(
+        rmin,
+        rmax,
+        ode_acc,
+        ode_eps,
+        root_acc
+    );
+}
+
+
+
+void write_wavefunction_data(
+    const std::string& filename,
+    double energy,
+    double rmin,
+    double rmax,
+    double ode_acc,
+    double ode_eps
+)
+{
+    auto [r_values, states] =
+        pp::hydrogen_wavefunction(
+            energy,
+            rmin,
+            rmax,
+            ode_acc,
+            ode_eps
+        );
+
+    if (r_values.size() != states.size()) {
+        throw std::runtime_error(
+            "write_wavefunction_data: inconsistent ODE output"
+        );
+    }
+
+    std::ofstream data(filename);
+
+    if (!data) {
+        throw std::runtime_error(
+            "Could not open " + filename
+        );
+    }
+
+    data << std::setprecision(16);
+
+    for (std::size_t i = 0; i < r_values.size(); ++i) {
+        const double r =
+            r_values[i];
+
+        const double numerical =
+            states[i][0];
+
+        const double exact =
+            r * std::exp(-r);
+        data
+            << r << " "
+            << numerical << " "
+            << exact << " "
+            << std::abs(numerical - exact)
+            << "\n";
+    }
+}
+
+
+
+void write_rmax_convergence(
+    const std::string& filename
+)
+{
+    const double rmin = 1e-3;
+    const double ode_acc = 1e-6;
+    const double ode_eps = 1e-6;
+
+    const std::vector<double> rmax_values{
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        12.0
+    };
+
+    std::ofstream data(filename);
+
+    if (!data) {
+        throw std::runtime_error(
+            "Could not open " + filename
+        );
+    }
+
+    data << std::setprecision(16);
+
+    for (double rmax : rmax_values) {
+        const double energy =
+            calculate_hydrogen_energy(
+                rmin,
+                rmax,
+                ode_acc,
+                ode_eps
+            );
+
+        data
+            << rmax << " "
+            << energy << " "
+            << hydrogen_energy_error(energy)
+            << "\n";
+    }
+}
+
+
+
+void write_rmin_convergence(
+    const std::string& filename
+)
+{
+    const double rmax = 8.0;
+    const double ode_acc = 1e-6;
+    const double ode_eps = 1e-6;
+
+    const std::vector<double> rmin_values{
+        1e-1,
+        5e-2,
+        1e-2,
+        5e-3,
+        1e-3,
+        5e-4,
+        1e-4
+    };
+
+    std::ofstream data(filename);
+
+    if (!data) {
+        throw std::runtime_error(
+            "Could not open " + filename
+        );
+    }
+
+    data << std::setprecision(16);
+
+    for (double rmin : rmin_values) {
+        const double energy =
+            calculate_hydrogen_energy(
+                rmin,
+                rmax,
+                ode_acc,
+                ode_eps
+            );
+
+        data
+            << rmin << " "
+            << energy << " "
+            << hydrogen_energy_error(energy)
+            << "\n";
+    }
+}
+
+
+
+void write_acc_convergence(
+    const std::string& filename
+)
+{
+    const double rmin = 1e-3;
+    const double rmax = 8.0;
+    const double fixed_eps = 1e-10;
+
+    const std::vector<double> acc_values{
+        1e-2,
+        3e-3,
+        1e-3,
+        3e-4,
+        1e-4,
+        3e-5,
+        1e-5,
+        3e-6,
+        1e-6
+    };
+
+    std::ofstream data(filename);
+
+    if (!data) {
+        throw std::runtime_error(
+            "Could not open " + filename
+        );
+    }
+
+    data << std::setprecision(16);
+
+    for (double acc : acc_values) {
+        const double energy =
+            calculate_hydrogen_energy(
+                rmin,
+                rmax,
+                acc,
+                fixed_eps
+            );
+
+        data
+            << acc << " "
+            << energy << " "
+            << hydrogen_energy_error(energy)
+            << "\n";
+    }
+}
+
+
+
+void write_eps_convergence(
+    const std::string& filename
+)
+{
+    const double rmin = 1e-3;
+    const double rmax = 8.0;
+    const double fixed_acc = 1e-10;
+
+    const std::vector<double> eps_values{
+        1e-2,
+        3e-3,
+        1e-3,
+        3e-4,
+        1e-4,
+        3e-5,
+        1e-5,
+        3e-6,
+        1e-6
+    };
+
+    std::ofstream data(filename);
+
+    if (!data) {
+        throw std::runtime_error(
+            "Could not open " + filename
+        );
+    }
+
+    data << std::setprecision(16);
+
+    for (double eps : eps_values) {
+        const double energy =
+            calculate_hydrogen_energy(
+                rmin,
+                rmax,
+                fixed_acc,
+                eps
+            );
+
+        data
+            << eps << " "
+            << energy << " "
+            << hydrogen_energy_error(energy)
+            << "\n";
+    }
+}
+
+
+
+void run_part_a()
+{
+    const double acc = 1e-10;
+    const double alpha_min = 1e-3;
+    const int max_iterations = 1000;
+
+    std::cout
+        << "A. Newton method with numerical Jacobian\n"
+        << "========================================\n\n";
+
+
+
+    pp::root_function one_dimensional_function =
+        [](const pp::vec& x) {
+            return pp::vec{
+                x[0] * x[0] - 2.0
+            };
+        };
+
+    const pp::vec root_1d =
+        pp::newton(
+            one_dimensional_function,
+            pp::vec{1.0},
+            acc,
+            alpha_min,
+            max_iterations
+        );
+
+    std::cout
+        << "A.1 One-dimensional test\n"
+        << "----------------------------------------\n"
+        << "Equation: x^2 - 2 = 0\n";
+
+    std::cout << "Calculated root: ";
+    print_vector(root_1d);
+    std::cout << "\n";
+
+    std::cout
+        << "Exact positive root: "
+        << std::sqrt(2.0)
+        << "\n"
+        << "Absolute error: "
+        << std::abs(root_1d[0] - std::sqrt(2.0))
+        << "\n"
+        << "Residual norm: "
+        << one_dimensional_function(root_1d).norm()
+        << "\n\n";
+
+
+
+    pp::root_function two_dimensional_function =
+        [](const pp::vec& z) {
+            const double x = z[0];
+            const double y = z[1];
+
+            return pp::vec{
+                x * x + y * y - 1.0,
+                x - y
+            };
+        };
+
+    const pp::vec root_2d =
+        pp::newton(
+            two_dimensional_function,
+            pp::vec{0.8, 0.6},
+            acc,
+            alpha_min,
+            max_iterations
+        );
+
+    const double exact_2d =
+        1.0 / std::sqrt(2.0);
+
+    std::cout
+        << "A.2 Two-dimensional test\n"
+        << "----------------------------------------\n"
+        << "Equations:\n"
+        << "    x^2 + y^2 - 1 = 0\n"
+        << "    x - y           = 0\n";
+
+    std::cout << "Calculated root: ";
+    print_vector(root_2d);
+    std::cout << "\n";
+
+    std::cout
+        << "Expected positive root: "
+        << "(" << exact_2d
+        << ", " << exact_2d << ")\n"
+        << "Residual norm: "
+        << two_dimensional_function(root_2d).norm()
+        << "\n\n";
+
+
+
+    const pp::vec rosenbrock_start{
+        -1.2,
+        1.0
+    };
+
+    const pp::vec rosenbrock_minimum =
+        pp::newton(
+            rosenbrock_gradient,
+            rosenbrock_start,
+            acc,
+            alpha_min,
+            max_iterations
+        );
+
+    std::cout
+        << "A.3 Rosenbrock valley function\n"
+        << "----------------------------------------\n";
+
+    std::cout << "Start point: ";
+    print_vector(rosenbrock_start);
+    std::cout << "\n";
+
+    std::cout << "Calculated stationary point: ";
+    print_vector(rosenbrock_minimum);
+    std::cout << "\n";
+
+    std::cout
+        << "Expected minimum: (1, 1)\n"
+        << "Function value: "
+        << rosenbrock_value(rosenbrock_minimum)
+        << "\n"
+        << "Gradient norm: "
+        << rosenbrock_gradient(
+               rosenbrock_minimum
+           ).norm()
+        << "\n\n";
+
+
+
+    const std::vector<pp::vec> himmelblau_starts{
+        pp::vec{ 3.5,  2.5},
+        pp::vec{-3.0,  3.0},
+        pp::vec{-4.0, -3.0},
+        pp::vec{ 4.0, -2.0}
+    };
+
+    std::cout
+        << "A.4 Himmelblau function\n"
+        << "----------------------------------------\n";
+
+    for (
+        int i = 0;
+        i < static_cast<int>(himmelblau_starts.size());
+        ++i
+    ) {
+        const pp::vec& start =
+            himmelblau_starts[i];
+
+        const pp::vec minimum =
+            pp::newton(
+                himmelblau_gradient,
+                start,
+                acc,
+                alpha_min,
+                max_iterations
+            );
+
+        std::cout
+            << "Solution " << i + 1 << "\n";
+
+        std::cout << "Start point: ";
+        print_vector(start);
+        std::cout << "\n";
+
+        std::cout << "Calculated stationary point: ";
+        print_vector(minimum);
+        std::cout << "\n";
+
+        std::cout
+            << "Function value: "
+            << himmelblau_value(minimum)
+            << "\n"
+            << "Gradient norm: "
+            << himmelblau_gradient(minimum).norm()
+            << "\n\n";
+    }
+}
+
+
+
+void run_part_b()
+{
+    const double rmin = 1e-3;
+    const double rmax = 8.0;
+    const double ode_acc = 1e-6;
+    const double ode_eps = 1e-6;
+
+    std::cout
+        << "B. Hydrogen ground state by shooting\n"
+        << "========================================\n\n";
+
+
+
+    std::cout
+        << "Boundary condition near r = 0\n"
+        << "----------------------------------------\n"
+        << "Assume\n"
+        << "    f(r) = a*r + b*r^2 + O(r^3).\n"
+        << "Then\n"
+        << "    f''(r) = 2*b + O(r).\n"
+        << "Inserting into\n"
+        << "    -f''/2 - f/r = E*f\n"
+        << "and comparing the constant terms gives\n"
+        << "    -b - a = 0,\n"
+        << "so b = -a.\n"
+        << "The normalization is arbitrary, so choosing a = 1 gives\n"
+        << "    f(r) = r - r^2 + O(r^3).\n\n";
+
+
+    const double numerical_energy =
+        calculate_hydrogen_energy(
+            rmin,
+            rmax,
+            ode_acc,
+            ode_eps
+        );
+
+        const double exact_energy = -0.5;
+
+    const double mismatch =
+        pp::hydrogen_mismatch(
+            numerical_energy,
+            rmin,
+            rmax,
+            ode_acc,
+            ode_eps
+        );
+
+    std::cout
+        << "Shooting-method result\n"
+        << "----------------------------------------\n"
+        << "rmin                  = " << rmin << "\n"
+        << "rmax                  = " << rmax << "\n"
+        << "ODE acc               = " << ode_acc << "\n"
+        << "ODE eps               = " << ode_eps << "\n"
+        << "Calculated energy     = "
+        << numerical_energy << "\n"
+        << "Exact energy          = "
+        << exact_energy << "\n"
+        << "Absolute energy error = "   
+        << hydrogen_energy_error(numerical_energy)
+        << "\n"
+        << "M(E) = f_E(rmax)      = "
+        << mismatch << "\n\n";
+
+
+ 
+    std::cout
+        << "Check of f_0(r) = r*exp(-r), E_0 = -1/2\n"
+        << "----------------------------------------\n";
+
+    for (double r : {0.25, 0.5, 1.0, 2.0, 4.0}) {
+        std::cout
+            << "r = " << std::setw(5) << r
+            << "    equation residual = "
+            << exact_schrodinger_residual(r)
+            << "\n";
+    }
+
+    std::cout << "\n";
+
+
+
+    write_wavefunction_data(
+        "hydrogen-wavefunction.data",
+        numerical_energy,
+        rmin,
+        rmax,
+        ode_acc,
+        ode_eps
+    );
+
+    write_rmax_convergence(
+        "convergence-rmax.data"
+    );
+
+    write_rmin_convergence(
+        "convergence-rmin.data"
+    );
+
+    write_acc_convergence(
+        "convergence-acc.data"
+    );
+
+    write_eps_convergence(
+        "convergence-eps.data"
+    );
+
+    std::cout
+        << "Generated data files\n"
+        << "----------------------------------------\n"
+        << "hydrogen-wavefunction.data\n"
+        << "convergence-rmax.data\n"
+        << "convergence-rmin.data\n"
+        << "convergence-acc.data\n"
+        << "convergence-eps.data\n\n";
+}
+
+
+
+void run_part_c()
+{
+    std::cout
+        << "C. Optimized quadratic line search\n"
+        << "========================================\n\n"
+        << "The Newton routine used in parts A and B contains:\n"
+        << "1. One Jacobian matrix allocated before the iteration\n"
+        << "   loop and updated in place at every Newton step.\n"
+        << "2. A quadratic interpolation line search based on\n"
+        << "       phi(alpha) = ||f(x + alpha*Dx)||^2 / 2.\n"
+        << "3. Backtracking until the sufficient-decrease\n"
+        << "   condition is satisfied or alpha reaches alpha_min.\n\n"
+        << "The successful Rosenbrock, Himmelblau, and hydrogen\n"
+        << "calculations above test this optimized implementation.\n";
+}
+
+}
+
+
+int main()
+{
+    try {
+        std::cout << std::setprecision(15);
+
+        run_part_a();
+        std::cout << "\n";
+
+        run_part_b();
+        std::cout << "\n";
+
+        run_part_c();
+
+        return 0;
+    }
+    catch (const std::exception& error) {
+        std::cerr
+            << "Error: "
+            << error.what()
+            << "\n";
+
+        return 1;
+    }
+}

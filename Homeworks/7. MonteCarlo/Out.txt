@@ -1,0 +1,36 @@
+A. Plain Monte Carlo integration
+============================================
+
+Area of the unit circle
+N = 1000000
+LCG plain MC           result = 3.137532000000000e+00  estimated error = 1.644998768685253e-03  actual error = 4.060653589792906e-03
+
+Volume of the ellipsoid
+N = 1000000
+LCG plain MC           result = 2.515104000000000e+01  estimated error = 2.397238217028921e-02  actual error = 1.829877128165691e-02
+
+B. Quasi-random sequences
+============================================
+
+Difficult three-dimensional integral
+Total evaluation budget = 1000000
+Exact result = 1.393203929685677e+00
+
+LCG                    result = 1.377991055968991e+00  estimated error = 4.399971846950101e-03  actual error = 1.521287371668589e-02
+Standard C++           result = 1.400095720621292e+00  estimated error = 1.251591200236265e-02  actual error = 6.891790935614761e-03
+Halton                 result = 1.380623220955462e+00  estimated error = 2.039952515019872e-03  actual error = 1.258070873021455e-02
+
+The difficult integral is not used for the convergence test.
+
+C. Recursive stratified sampling
+============================================
+
+Unit-circle comparison
+N = 200000, nmin = 64
+
+Plain MC               result = 3.145220000000000e+00  estimated error = 3.666381834724801e-03  actual error = 3.627346410207011e-03
+Stratified MC          result = 3.151341597849846e+00  estimated error = 4.878572218330816e-03  actual error = 9.748944260053349e-03
+
+Generated data files:
+  out.circle.txt
+  out.quasi.txt
