@@ -1,0 +1,48 @@
+A. Newton minimization with numerical derivatives
+=================================================
+
+Rosenbrock function
+-------------------
+Starting point   = (-1.2, 1)
+Minimum point    = (0.999990915119, 0.99998181558)
+Function value   = 8.25567900259e-11
+Gradient norm    = 3.24543634183e-07
+Newton steps     = 23
+Converged        = true
+
+Himmelblau function, start 1
+----------------------------
+Starting point   = (3.5, 1.5)
+Minimum point    = (2.99999997157, 1.99999999469)
+Function value   = 3.34113184606e-14
+Gradient norm    = 1.18545711896e-08
+Newton steps     = 5
+Converged        = true
+
+Himmelblau function, start 2
+----------------------------
+Starting point   = (-3, 3)
+Minimum point    = (-2.80511810303, 3.13131249569)
+Function value   = 2.93437247177e-14
+Gradient norm    = 9.9944355019e-07
+Newton steps     = 664
+Converged        = true
+
+Himmelblau function, start 3
+----------------------------
+Starting point   = (-4, -3)
+Minimum point    = (-3.77931030033, -3.28318603805)
+Function value   = 1.62575757316e-13
+Gradient norm    = 1.63817406923e-08
+Newton steps     = 4
+Converged        = true
+
+Himmelblau function, start 4
+----------------------------
+Starting point   = (4, -2)
+Minimum point    = (3.58442830727, -1.84812654023)
+Function value   = 6.28961973856e-14
+Gradient norm    = 2.28959257175e-08
+Newton steps     = 4
+Converged        = true
+
